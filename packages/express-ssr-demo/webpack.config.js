@@ -4,8 +4,6 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 
-const isProd = process.env.NODE_ENV === 'production';
-
 const antStyles = /antd\/.*?\/style.*?/;
 
 const commonCfg = {
@@ -22,12 +20,39 @@ const commonCfg = {
   },
   module: {
     rules: [
+      // less
+      {
+        test: /\.less$/i,
+        use: [
+          // 本意不想在服务端配置进行拆离的，但不加的时候，服务端 CSS modules 会有问题
+          // 所以干脆都加上 MiniCssExtractPlugin 了
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                mode: 'global',
+                localIdentName: '[local]--[hash:base64:5]',
+              },
+            },
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              javascriptEnabled: true,
+            },
+          },
+        ],
+      },
       // url-loader
       {
         test: /\.(png|jpe?g|gif|webp)(\?.*)?$/,
         loader: 'url-loader/',
         options: {
-          limit: 4096,
+          // 这里设置成 1 是不让图片被处理成内联的 dataurl 数据
+          limit: 1,
           fallback: {
             loader: 'file-loader',
             options: {
@@ -77,31 +102,6 @@ const serverCfg = {
         use: 'null-loader',
         enforce: 'pre',
       },
-      // less
-      {
-        test: /\.less$/i,
-        use: [
-          // 本意不想在服务端配置进行拆离的，但不加的时候，服务端 CSS modules 会有问题
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                mode: 'global',
-                localIdentName: '[local]--[hash:base64:5]',
-              },
-            },
-          },
-          {
-            loader: 'less-loader',
-            options: {
-              javascriptEnabled: true,
-            },
-          },
-        ],
-      },
     ],
   },
 };
@@ -113,35 +113,7 @@ const clientCfg = {
   output: {
     path: path.resolve(__dirname, './distClient'),
   },
-  module: {
-    rules: [
-      // less
-      {
-        test: /\.less$/i,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                mode: 'global',
-                localIdentName: '[local]--[hash:base64:5]',
-              },
-            },
-          },
-          {
-            loader: 'less-loader',
-            options: {
-              javascriptEnabled: true,
-            },
-          },
-        ],
-      },
-    ],
-  },
-  plugins: [new ManifestPlugin()].filter(Boolean),
+  plugins: [new ManifestPlugin()],
 };
 
 module.exports = [merge(commonCfg, serverCfg), merge(commonCfg, clientCfg)];

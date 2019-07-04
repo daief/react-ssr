@@ -1,9 +1,8 @@
-import * as React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import Home from '@/pages/Home';
-import About from '@/pages/About';
-// import 'antd/dist/antd.less';
 import '@/global.less';
+import About from '@/pages/About';
+import Home from '@/pages/Home';
+import * as React from 'react';
+import { Route, Switch } from 'react-router-dom';
 
 export const Routes: React.SFC = () => {
   return (

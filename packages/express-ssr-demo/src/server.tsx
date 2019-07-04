@@ -1,11 +1,11 @@
+import { Routes } from '@/routes';
+import { createStore, StoreCtx } from '@/store';
 import * as React from 'react';
 import { StaticRouter } from 'react-router';
-import { Routes } from '@/routes';
-import { StoreCtx, createStore } from '@/store';
 
 function ServerRender(req, context, initStore) {
   return props => {
-    // this is a hook, call inside render
+    // hook 要在这、函数组件内部调用
     const value = createStore(initStore);
     return (
       <StoreCtx.Provider value={value}>

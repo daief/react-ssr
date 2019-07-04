@@ -5,21 +5,45 @@
 // }
 
 import express from 'express';
-import ReactDOMServer from 'react-dom/server';
-import * as React from 'react';
 import { resolve } from 'path';
+import * as React from 'react';
+import ReactDOMServer from 'react-dom/server';
+// 引用 Server 端打包结果
 const serverBuild = require('../distServer').default;
+// 引用 Client manifest
 const manifest = require('../distClient/manifest.json');
 
 const app = express();
 
+// 将 Client 输出目录作为静态资源目录
 app.use(express.static(resolve(__dirname, '../distClient')));
 
-const render = (req, res, ctx, data) => {
+// `/` `/about` 是支持 SSR 的路由
+app.get(['/', '/about'], async (req, res) => {
+  const context: any = {};
+
+  // 已经渲染过的页面，这里不再渲染
+  if (context.url) {
+    res.writeHead(302, {
+      Location: context.url,
+    });
+    res.end();
+  } else {
+    await new Promise(_ => {
+      setTimeout(_, 500);
+    });
+    render(req, res, context, { count: 10 });
+  }
+});
+
+function render(req, res, ctx, data) {
+  // 通过 renderToString 将组件转换成 HTML 字符串
   const contentHtml = ReactDOMServer.renderToString(
+    // 在服务端运行 React
     React.createElement(serverBuild(req, ctx, data)),
   );
 
+  // 下面的是拼接出一个完整的 HTML 并发送给浏览器
   const renderLink = (): string => {
     return Object.keys(manifest)
       .filter(key => /\.css$/.test(key))
@@ -53,25 +77,10 @@ const render = (req, res, ctx, data) => {
     </body>
     </html>
   `);
-};
-
-app.get(['/', '/about'], async (req, res) => {
-  const context: any = {};
-
-  if (context.url) {
-    res.writeHead(302, {
-      Location: context.url,
-    });
-    res.end();
-  } else {
-    await new Promise(resolve => {
-      setTimeout(resolve, 500);
-    });
-    render(req, res, context, { count: 0 });
-  }
-});
+}
 
 const PORT = 5000;
 app.listen(PORT, () => {
+  // tslint:disable-next-line: no-console
   console.log(`http://localhost:${PORT}`);
 });
