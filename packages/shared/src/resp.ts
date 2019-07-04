@@ -1,0 +1,5 @@
+export enum RESPONSE_CODE {
+  SUCCESS = '000000',
+  TOKEN_INVALID = '100000',
+  SYSTEM_ERROR = '900000',
+}

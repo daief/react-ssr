@@ -1,0 +1,16 @@
+{
+  "name": "@react-ssr/express-ssr-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev:s": "nodemon",
+    "watch:web": "cross-env NODE_ENV=development webpack --watch",
+    "prebuild": "rimraf distClient distServer lib",
+    "build": "cross-env NODE_ENV=production webpack && yarn tsc --outDir lib  -p server",
+    "start": "cross-env NODE_ENV=production node ./lib/index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

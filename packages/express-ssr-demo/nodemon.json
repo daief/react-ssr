@@ -1,0 +1,9 @@
+{
+  "watch": ["./server/index.ts", "./distServer/", "./distClient/"],
+  "ext": "ts,css,js",
+  "delay": "100",
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "exec": "cd server && ts-node index.ts"
+}
