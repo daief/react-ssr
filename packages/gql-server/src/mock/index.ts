@@ -19,9 +19,10 @@ function ca(
 
 export const mock = {
   [CONFIG.services.unified_certification]: {
-    'get /login': (data, cookie) =>
+    'get /login': (data, headers) =>
       ca({ token: `this_is_a_fake_token_${data.account}_${data.password}` }),
   },
+  [CONFIG.services.customer]: {},
 };
 
 export const fakeRequestRest = async (
@@ -30,7 +31,7 @@ export const fakeRequestRest = async (
     method?: 'GET' | 'POST';
     path: string;
     data?: any;
-    cookie?: any;
+    headers?: any;
   },
 ) => {
   if (!CONFIG.isMock) {
@@ -38,7 +39,7 @@ export const fakeRequestRest = async (
   }
   const apis = mock[domain];
   const keys = Object.keys(apis || {});
-  const { method, path, data, cookie } = { method: 'GET', ...options };
+  const { method, path, data, headers } = { method: 'GET', ...options };
   const key = keys.find(k => {
     const [m, p] = k.split(' ');
     return (
@@ -50,7 +51,7 @@ export const fakeRequestRest = async (
   if (key) {
     const api = apis[key];
     if (typeof api === 'function') {
-      return api(data, cookie);
+      return api(data, headers);
     } else {
       return new Promise(resolve => {
         setTimeout(() => {

@@ -10,7 +10,7 @@ function isVaildString(val: string | null) {
   return val && typeof val === 'string' && val.length;
 }
 
-// ! 使用需注意
+// ! 使用需注意这里的 class
 // https://github.com/apollographql/apollo-server/issues/1388#issuecomment-406756378
 export class RESTService extends RESTDataSource<GQLContext> {
   private baseurl: string;
@@ -81,16 +81,7 @@ export class RESTService extends RESTDataSource<GQLContext> {
     }
 
     if (CONFIG.isMock) {
-      const mockResult = await fakeRequestRest(this.baseURL, {
-        path,
-        data: params,
-        cookie: {
-          token: this.token,
-          lng: this.context.lng,
-        },
-      });
-      this.vaildResponeCode(mockResult);
-      return mockResult;
+      return this.sendMockReq('GET', path, params);
     }
 
     const info = await super.get<Resp<T>>(path, params).catch(e => {
@@ -111,17 +102,7 @@ export class RESTService extends RESTDataSource<GQLContext> {
     }
 
     if (CONFIG.isMock) {
-      const mockResult = await fakeRequestRest(this.baseURL, {
-        method: 'POST',
-        path,
-        data: body,
-        cookie: {
-          token: this.token,
-          lng: this.context.lng,
-        },
-      });
-      this.vaildResponeCode(mockResult);
-      return mockResult;
+      return this.sendMockReq('POST', path, body);
     }
 
     const info = await super.post<Resp<T>>(path, body).catch(e => {
@@ -130,5 +111,21 @@ export class RESTService extends RESTDataSource<GQLContext> {
     });
     this.vaildResponeCode(info);
     return info;
+  }
+
+  private async sendMockReq(method: any, path: string, data: any) {
+    const mockResult = await fakeRequestRest(this.baseURL, {
+      method,
+      path,
+      data,
+      headers: {
+        ...this.context.req.headers,
+        Authorization: this.token,
+        'x-c-locale': this.context.lng,
+        clientKey: this.headers.get('clientKey'),
+      },
+    });
+    this.vaildResponeCode(mockResult);
+    return mockResult;
   }
 }

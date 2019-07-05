@@ -18,3 +18,11 @@ export function createResp<TContent>(
   }
   return Response;
 }
+
+@ObjectType()
+export class EmptyContentResp {
+  @Field({ nullable: true })
+  public message?: string;
+  @Field()
+  public code: string;
+}

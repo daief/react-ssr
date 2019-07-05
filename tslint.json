@@ -10,6 +10,7 @@
     "quotemark": [true, "single", "jsx-double"],
     "arrow-parens": false,
     "max-classes-per-file": false,
-    "no-var-requires": false
+    "no-var-requires": false,
+    "object-literal-key-quotes": false
   }
 }

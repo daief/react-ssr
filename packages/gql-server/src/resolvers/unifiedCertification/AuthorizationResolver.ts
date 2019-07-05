@@ -1,6 +1,8 @@
 import { GQLContext } from '@/interface';
+import { RESPONSE_CODE } from '@react-ssr/shared';
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 import { ILoginResultResp, LoginResultResp } from '../gql-types/authorization';
+import { EmptyContentResp } from '../gql-types/typeFactory';
 
 @Resolver()
 export class AuthorizationResolver {
@@ -17,7 +19,22 @@ export class AuthorizationResolver {
         password,
       },
     );
+    ctx.setToken({
+      token: resp.content.token,
+    });
     return resp;
+  }
+
+  @Mutation(_ => EmptyContentResp, { description: 'logout api' })
+  public async logout(@Ctx() { setToken }: GQLContext): Promise<
+    EmptyContentResp
+  > {
+    setToken({
+      deleted: true,
+    });
+    return {
+      code: RESPONSE_CODE.SUCCESS,
+    };
   }
 
   @Query(_ => LoginResultResp)
