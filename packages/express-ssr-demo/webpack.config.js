@@ -85,11 +85,13 @@ const serverCfg = {
     path: path.resolve(__dirname, './distServer'),
   },
   externals: [
+    // 排除 antd 样式以外的第三方依赖
     // https://github.com/liady/webpack-node-externals/issues/39#issuecomment-356647854
     nodeExternals({
       // https://github.com/zeit/next.js/blob/e00a2c5d64def08fc5c18c5262bfb52da7c87093/examples/with-ant-design/next.config.js#L11
       whitelist: [antStyles],
     }),
+    // 兼容 workspaces
     nodeExternals({
       modulesDir: path.resolve(__dirname, '../../node_modules'),
       whitelist: [antStyles],
