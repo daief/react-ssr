@@ -1,0 +1,8 @@
+{
+  "name": "@react-ssr/nextjs-ssr",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev src",
+    "build": "next build src"
+  }
+}
