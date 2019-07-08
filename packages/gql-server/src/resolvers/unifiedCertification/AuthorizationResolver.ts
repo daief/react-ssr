@@ -1,7 +1,12 @@
 import { GQLContext } from '@/interface';
 import { RESPONSE_CODE } from '@react-ssr/shared';
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
-import { ILoginResultResp, LoginResultResp } from '../gql-types/authorization';
+import {
+  ILoginResultResp,
+  IUserInfoResp,
+  LoginResultResp,
+  UserInfoResp,
+} from '../gql-types/authorization';
 import { EmptyContentResp } from '../gql-types/typeFactory';
 
 @Resolver()
@@ -12,7 +17,7 @@ export class AuthorizationResolver {
     @Arg('account') account: string,
     @Arg('password') password: string,
   ): Promise<ILoginResultResp> {
-    const resp = await ctx.dataSources.unifiedCertificationService.restGet(
+    const resp = await ctx.dataSources.unifiedCertificationService.restPost(
       '/login',
       {
         account,
@@ -37,14 +42,11 @@ export class AuthorizationResolver {
     };
   }
 
-  @Query(_ => LoginResultResp)
-  public async userInfo(@Ctx() ctx: GQLContext): Promise<ILoginResultResp> {
-    return {
-      code: '111ddd',
-      message: 'success',
-      content: {
-        token: 'ddd',
-      },
-    };
+  @Query(_ => UserInfoResp)
+  public async userInfo(@Ctx() ctx: GQLContext): Promise<IUserInfoResp> {
+    const resp = await ctx.dataSources.unifiedCertificationService.restGet<
+      IUserInfoResp
+    >('/info');
+    return resp;
   }
 }

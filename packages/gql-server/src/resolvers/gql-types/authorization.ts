@@ -9,3 +9,13 @@ export class LoginResult {
 
 export const LoginResultResp = createResp(LoginResult);
 export type ILoginResultResp = InstanceType<typeof LoginResultResp>;
+
+@ObjectType()
+export class UserInfo {
+  @Field()
+  public username: string;
+  @Field()
+  public email: string;
+}
+export const UserInfoResp = createResp(UserInfo);
+export type IUserInfoResp = InstanceType<typeof UserInfoResp>;

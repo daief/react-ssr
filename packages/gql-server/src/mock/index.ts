@@ -7,8 +7,8 @@ import { RESPONSE_CODE } from '@react-ssr/shared';
 
 function ca(
   content: any = {},
-  message = 'success',
   code: RESPONSE_CODE = RESPONSE_CODE.SUCCESS,
+  message = 'success',
 ): Resp<any> {
   return {
     code,
@@ -19,10 +19,46 @@ function ca(
 
 export const mock = {
   [CONFIG.services.unified_certification]: {
-    'get /login': (data, headers) =>
+    'post /login': (data, headers) =>
       ca({ token: `this_is_a_fake_token_${data.account}_${data.password}` }),
+    'get /info': (_, headers) => {
+      if (!headers.Authorization) {
+        return ca({}, RESPONSE_CODE.TOKEN_INVALID, 'Token invalid.');
+      }
+      return ca({
+        username: headers.Authorization,
+        email: `${headers.Authorization}@example.com`,
+      });
+    },
   },
-  [CONFIG.services.customer]: {},
+  [CONFIG.services.customer]: {
+    'get /customer/list': (params, headers) => {
+      if (!headers.Authorization) {
+        return ca({}, RESPONSE_CODE.TOKEN_INVALID, 'Token invalid.');
+      }
+      const { age = 0, createTime = null } = {
+        age: 12,
+        createTime: new Date(),
+        ...params,
+      };
+      const startId = (Math.random() * 100).toFixed(0);
+      return ca(
+        Array(10)
+          .fill(void 0)
+          .map((__, i) => ({
+            id: `${startId}-${i}`,
+            name: `name-${startId}`,
+            age: age + i,
+            orderList: Array(3)
+              .fill(void 0)
+              .map((___, j) => ({
+                id: `${startId}-${i}-${j}`,
+                createTime: createTime.setDate((createTime.getDate() + j) % 28),
+              })),
+          })),
+      );
+    },
+  },
 };
 
 export const fakeRequestRest = async (

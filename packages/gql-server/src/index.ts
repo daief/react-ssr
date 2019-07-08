@@ -7,7 +7,7 @@ import { buildSchema } from 'type-graphql';
 import { CONFIG } from './CONFIG';
 import { createApollo } from './schema';
 
-function fastifyApollo(configuration: { cookieName: string }) {
+async function main() {
   const fastifyApp = fastify({
     pluginTimeout: 900000,
     logger: { level: 'error' },
@@ -22,7 +22,7 @@ function fastifyApollo(configuration: { cookieName: string }) {
 
   fastifyApp.register(fastifyCookie);
 
-  // 写 cookie token
+  // 请求返回之前控制写 cookie token
   fastifyApp.addHook('onSend', (ctx, reply, payload, next) => {
     // @ts-ignore 读取自定义的 token 信息
     const session = ctx.req.session;
@@ -46,14 +46,7 @@ function fastifyApollo(configuration: { cookieName: string }) {
     next();
   });
 
-  return fastifyApp;
-}
-
-async function main() {
-  const fastifyApp = fastifyApollo({
-    cookieName: CONFIG.cookieKeys.token,
-  });
-
+  // --- 引入 resolvers 并注册 apollo
   function importAll(r: any) {
     return r.keys().map(key => r(key));
   }
@@ -61,7 +54,7 @@ async function main() {
   const unifiedCertificationSchema = await buildSchema({
     resolvers: importAll(
       // @ts-ignore
-      require.context('./resolvers/unifiedCertification', true, /.*ts$/),
+      require.context('./resolvers/', true, /.*ts$/),
     ),
     validate: false,
     dateScalarMode: 'timestamp',

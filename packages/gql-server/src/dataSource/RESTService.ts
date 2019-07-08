@@ -71,7 +71,10 @@ export class RESTService extends RESTDataSource<GQLContext> {
     return body;
   }
 
-  public async restGet<T = any>(path: string, params?: URLSearchParamsInit) {
+  public async restGet<T = any>(
+    path: string,
+    params?: URLSearchParamsInit | Record<string, any>,
+  ): Promise<T> {
     if (process.env.NODE_ENV === 'development') {
       Log.Info(
         'GET',
@@ -92,7 +95,10 @@ export class RESTService extends RESTDataSource<GQLContext> {
     return info;
   }
 
-  public async restPost<T = any>(path: string, body?: BodyInit | object) {
+  public async restPost<T = any>(
+    path: string,
+    body?: BodyInit | object,
+  ): Promise<T> {
     if (process.env.NODE_ENV === 'development') {
       Log.Info(
         'POST',
