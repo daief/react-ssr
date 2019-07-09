@@ -8,8 +8,11 @@
   ],
   "dependencies": {
     "antd": "^3.20.0",
+    "browser-cookies": "^1.2.0",
+    "i18next": "^17.0.6",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-i18next": "^10.11.4",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "tslib": "^1.10.0"

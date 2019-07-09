@@ -64,6 +64,23 @@ module.exports = (nextConfig = {}) => {
         ];
       }
 
+      if (isServer) {
+        // https://github.com/zeit/next.js/blob/canary/examples/with-ant-design/next.config.js
+        const antStyles = /antd\/.*?\/style.*?/;
+        const origExternals = [...config.externals];
+        config.externals = [
+          (context, request, callback) => {
+            if (request.match(antStyles)) return callback();
+            if (typeof origExternals[0] === 'function') {
+              origExternals[0](context, request, callback);
+            } else {
+              callback();
+            }
+          },
+          ...(typeof origExternals[0] === 'function' ? [] : origExternals),
+        ];
+      }
+
       if (typeof nextConfig.webpack === 'function') {
         return nextConfig.webpack(config, options);
       }

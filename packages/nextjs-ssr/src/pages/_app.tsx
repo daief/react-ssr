@@ -1,35 +1,69 @@
 import '@/global.less';
-import { getInitialPropsResultOfComponent } from '@react-ssr/shared/src/next-tools';
+import { lang as en } from '@/locales/en';
+import { lang as zh } from '@/locales/zh';
+import {
+  getInitialPropsResultOfComponent,
+  lngFromReq,
+  LOCALE_ENUM,
+} from '@react-ssr/shared';
+import { I18nextProvider, i18nReact } from '@react-ssr/shared/compts';
+import { CONFIG } from '@react-ssr/shared/CONFIG';
+import { Log } from '@react-ssr/shared/src/Log';
 import App, { AppContext, Container } from 'next/app';
 import Head from 'next/head';
 
-class MyApp extends App<any> {
-  public static async getInitialProps({ Component, ctx }: AppContext) {
-    const errorPage = ctx.pathname === '/_error';
-    const pageProps = await getInitialPropsResultOfComponent(Component, ctx);
+const resources = {
+  [LOCALE_ENUM.EN_US]: en,
+  [LOCALE_ENUM.ZH_CH]: zh,
+};
 
+class MyApp extends App<{
+  pageProps: any;
+}> {
+  public static async getInitialProps({ Component, ctx }: AppContext) {
+    const pageProps = await getInitialPropsResultOfComponent(Component, ctx);
+    // 第一次打开页面这里在服务端执行，以后只在浏览器切换路由时执行
+    // 所以可以作为初始化国际化的地方
+    // 另外这里可以拿到 req 对象，从而获取国际化的初始语言
+    if (!process.browser) {
+      try {
+        await i18nReact.init({
+          fallbackLng: LOCALE_ENUM.EN_US,
+          lng: lngFromReq(ctx.req),
+          resources,
+        });
+      } catch (e) {
+        Log.Error('Init i18nReact error:', e);
+      }
+    }
     return {
-      errorPage,
       pageProps,
     };
   }
 
   constructor(props) {
     super(props);
-  }
 
-  public componentDidMount() {
-    // check account login status
-    // console.log('componentDidMount');
+    if (process.browser) {
+      i18nReact
+        .init({
+          debug: false,
+          fallbackLng: LOCALE_ENUM.EN_US,
+          lng: lngFromReq(),
+          resources,
+        })
+        .catch(e => {
+          Log.Error('Init i18nReact error:', e);
+        });
+    }
   }
 
   public componentDidCatch(e) {
-    // tslint:disable-next-line: no-console
-    console.log('error catch', e);
+    Log.Error('error catch', e);
   }
 
   public render() {
-    const { errorPage, Component, pageProps } = this.props;
+    const { Component, pageProps } = this.props;
     // const Plain: React.SFC = ({ children }) => <>{children}</>;
 
     return (
@@ -42,7 +76,9 @@ class MyApp extends App<any> {
           />
         </Head>
         <Container>
-          <Component {...pageProps} />
+          <I18nextProvider>
+            <Component {...pageProps} />
+          </I18nextProvider>
         </Container>
       </>
     );

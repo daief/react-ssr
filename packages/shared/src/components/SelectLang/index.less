@@ -1,0 +1,24 @@
+@import '~antd/lib/style/themes/default.less';
+
+:local(.menu) {
+  .anticon {
+    margin-right: 8px;
+  }
+  .ant-dropdown-menu-item {
+    min-width: 160px;
+  }
+}
+
+:local(.dropDown) {
+  cursor: pointer;
+  vertical-align: top;
+  line-height: @layout-header-height;
+  > i {
+    font-size: 16px !important;
+    transform: none !important;
+    svg {
+      position: relative;
+      top: -1px;
+    }
+  }
+}
