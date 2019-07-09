@@ -6,9 +6,8 @@ module.exports = (nextConfig = {}) => {
   return Object.assign(
     {},
     nextConfig,
-    // withTM
-    {
-      // transpileModules: ['@react-ssr/shared'],
+    withTM({
+      transpileModules: ['@react-ssr/shared'],
       webpack(config, options) {
         const { dev, isServer } = options;
 
@@ -41,12 +40,13 @@ module.exports = (nextConfig = {}) => {
           ],
         });
 
-        config.resolve.symlinks = false;
-        config.module.rules.push({
-          test: /\.(jsx?|tsx?)$/,
-          include: [/@react-ssr/],
-          // exclude: /node_modules/,
-          loader: options.defaultLoaders.babel,
+        config.module.rules.forEach(rule => {
+          if (rule.use && rule.use.loader === 'next-babel-loader') {
+            // 设置 babel 向上寻找 babel.config.js，然后将其所在的路径作为根（root）
+            // 否则编译其他 package 时不会加载 babel 插件
+            // https://babeljs.io/docs/en/config-files#project-wide-configuration
+            rule.use.options.rootMode = 'upward';
+          }
         });
 
         if (typeof nextConfig.webpack === 'function') {
@@ -55,6 +55,6 @@ module.exports = (nextConfig = {}) => {
 
         return config;
       },
-    },
+    }),
   );
 };
