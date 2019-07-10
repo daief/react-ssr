@@ -26,6 +26,7 @@ const resources = {
 
 class MyApp extends App<{
   pageProps: any;
+  layoutProps: any;
 }> {
   public client: ApolloClient<NormalizedCacheObject>;
 
@@ -63,11 +64,16 @@ class MyApp extends App<{
     }
 
     // 获取 apollo client 对象，挂到 ctx 对象上
-    const client = getApollo({});
+    const client = getApollo({ ctx });
     ctx.client = client;
-    const pageProps = await getInitialPropsResultOfComponent(Component, ctx);
+    const [pageProps, layoutProps] = await Promise.all([
+      getInitialPropsResultOfComponent(Component, ctx),
+      // @ts-ignore
+      getInitialPropsResultOfComponent(Component.Layout, ctx),
+    ]);
     return {
       pageProps,
+      layoutProps,
     };
   }
 
@@ -76,8 +82,10 @@ class MyApp extends App<{
   }
 
   public render() {
-    const { Component, pageProps } = this.props;
-    // const Plain: React.SFC = ({ children }) => <>{children}</>;
+    const { Component, pageProps, layoutProps } = this.props;
+    const Plain: React.SFC = ({ children }) => <>{children}</>;
+    // @ts-ignore
+    const Layout = Component.Layout || Plain;
 
     return (
       <>
@@ -94,7 +102,9 @@ class MyApp extends App<{
               <div className={styles.select_lang}>
                 <SeleceLang />
               </div>
-              <Component {...pageProps} />
+              <Layout {...layoutProps}>
+                <Component {...pageProps} />
+              </Layout>
             </ApolloWrap>
           </I18nextProvider>
         </Container>

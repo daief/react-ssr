@@ -1,24 +1,29 @@
-import gql from '@/gqls/login.gql';
+import gql from '@/gqls/auth.gql';
 import { FI } from '@axew/rc-if';
 import {
   requiredRule,
   RESPONSE_CODE,
   useMutationExtend,
 } from '@react-ssr/shared';
-import { CONFIG } from '@react-ssr/shared/CONFIG';
 import { Alert, Button, Form, Input, Row } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { ILoginResultResp } from 'gql-types/authorization';
 import { LANG_HELPER } from 'locales/en';
+import { WithRouterProps } from 'next/dist/client/with-router';
+import Router, { withRouter } from 'next/router';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './style.less';
 
-export const Page: React.SFC<FormComponentProps> = ({ form }) => {
+export const Page: React.SFC<FormComponentProps & WithRouterProps> = ({
+  form,
+  router,
+}) => {
   const { t } = useTranslation();
   const [doLogin, { loading, errorMessage }] = useMutationExtend<{
     login: ILoginResultResp;
   }>(gql.login);
+  const callbackURL = router.query.callback as string;
 
   const handleSubmit = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
@@ -33,11 +38,14 @@ export const Page: React.SFC<FormComponentProps> = ({ form }) => {
       })
         .then(resp => {
           if (resp.data.login.code === RESPONSE_CODE.SUCCESS) {
-            //
-            // location.href = `${CONFIG.clientDomains.customer}`;
+            if (callbackURL) {
+              location.href = callbackURL;
+            } else {
+              Router.push('/');
+            }
           }
         })
-        .catch(e => {
+        .catch(() => {
           // 网络错误、非成功 code、各种错误进入 catch
         });
     });
@@ -93,4 +101,4 @@ export const Page: React.SFC<FormComponentProps> = ({ form }) => {
   );
 };
 
-export default Form.create()(Page);
+export default Form.create()(withRouter(Page));

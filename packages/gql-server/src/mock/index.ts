@@ -18,22 +18,67 @@ function ca(
 }
 
 /**
+ * 假装存储 token
+ */
+const fakeTokenStore = new (class {
+  public tokens: Record<string, number>;
+  /**
+   * 有效期
+   */
+  public validity = Infinity;
+
+  constructor() {
+    this.tokens = {};
+  }
+
+  /**
+   * 添加
+   * @param t
+   */
+  public add(t: string) {
+    this.tokens[t] = Date.now();
+  }
+
+  /**
+   * 校验
+   * @param t
+   */
+  public invalid(t: string) {
+    if (this.tokens[t] && Date.now() - this.tokens[t] < this.validity) {
+      return true;
+    }
+
+    // 失效并删除
+    delete this.tokens[t];
+    return false;
+  }
+
+  public clear() {
+    this.tokens = {};
+  }
+})();
+
+/**
  * 请求 mock，这里简单处理 mock 的响应
  */
 export const mock = {
   [CONFIG.services.unified_certification]: {
-    'post /login': (data, headers) =>
-      data.password === '123456'
-        ? ca({ token: `this_is_a_fake_token_${data.account}_123456` })
-        : ca(
-            {},
-            RESPONSE_CODE.FAIL,
-            headers['x-c-locale'] === LOCALE_ENUM.ZH_CH
-              ? '密码错误（123456）'
-              : 'Wrong password(123456)',
-          ),
+    'post /login': (data, headers) => {
+      if (data.password !== '123456') {
+        return ca(
+          {},
+          RESPONSE_CODE.FAIL,
+          headers['x-c-locale'] === LOCALE_ENUM.ZH_CH
+            ? '密码错误（123456）'
+            : 'Wrong password(123456)',
+        );
+      }
+      const token = `this_is_a_fake_token_${data.account}_123456`;
+      fakeTokenStore.add(token);
+      return ca({ token });
+    },
     'get /info': (_, headers) => {
-      if (!headers.Authorization) {
+      if (!fakeTokenStore.invalid(headers.Authorization)) {
         return ca({}, RESPONSE_CODE.TOKEN_INVALID, 'Token invalid.');
       }
       return ca({

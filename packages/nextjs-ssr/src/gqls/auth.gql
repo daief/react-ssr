@@ -6,3 +6,13 @@ mutation login($account: String!, $password: String!) {
     code
   }
 }
+
+query info {
+  userInfo {
+    content {
+      username
+      email
+    }
+    code
+  }
+}
