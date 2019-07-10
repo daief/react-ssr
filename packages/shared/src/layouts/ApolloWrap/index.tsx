@@ -2,6 +2,7 @@ import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { createHttpLink } from 'apollo-link-http';
+import apolloLogger from 'apollo-link-logger';
 import 'isomorphic-unfetch';
 import { NextPageContext } from 'next';
 import * as React from 'react';
@@ -34,13 +35,29 @@ export function getApollo(options: {
   if (process.browser && apolloClient) {
     return apolloClient;
   }
-  const { links = [] } = options;
+  const { links = [], ctx } = options;
+
+  // const authLink = setContext((_, { headers }) => {
+  //   const { host: __, ...rest } = (!process.browser && getHeaders
+  //     ? getHeaders()
+  //     : {}) as any;
+  //   return {
+  //     headers: {
+  //       ...headers,
+  //       ...rest,
+  //     },
+  //   };
+  // });
+
   // 服务端每次生成新的 apollo client 对象
   apolloClient = new ApolloClient({
     cache: new InMemoryCache(),
     // connectToDevTools: process.browser,
     link: ApolloLink.from(
       [
+        process.env.NODE_ENV === 'development' && process.browser
+          ? apolloLogger
+          : null,
         ...links,
         createHttpLink({
           credentials: 'include',

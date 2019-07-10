@@ -13,7 +13,10 @@ export const SeleceLang: React.SFC<{
     if (lang !== undefined && !/^([a-z]{2})-([A-Z]{2})$/.test(lang)) {
       throw new Error('setLocale lang format error');
     }
-    cookies.set(CONFIG.cookieKeys.lng, lang, { expires: 365 });
+    cookies.set(CONFIG.cookieKeys.lng, lang, {
+      expires: 365,
+      domain: CONFIG.mainDomain,
+    });
     i18n.changeLanguage(lang);
   }
 

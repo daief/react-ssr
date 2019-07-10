@@ -42,6 +42,11 @@
   resolved "https://registry.npm.taobao.org/@apollographql/graphql-playground-html/download/@apollographql/graphql-playground-html-1.6.20.tgz#bf9f2acdf319c0959fad8ec1239741dd2ead4e8d"
   integrity sha1-v58qzfMZwJWfrY7BI5dB3S6tTo0=
 
+"@axew/rc-if@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/@axew/rc-if/download/@axew/rc-if-1.0.0.tgz#6472caecdca799dcaa156668fca1df875f040d6b"
+  integrity sha1-ZHLK7NynmdyqFWZo/KHfh18EDWs=
+
 "@babel/code-frame@^7.0.0":
   version "7.0.0"
   resolved "https://registry.npm.taobao.org/@babel/code-frame/download/@babel/code-frame-7.0.0.tgz#06e2ab19bdb535385559aabb5ba59729482800f8"
@@ -1600,6 +1605,14 @@ apollo-graphql@^0.3.3:
     apollo-env "0.5.1"
     lodash.sortby "^4.7.0"
 
+apollo-link-context@^1.0.18:
+  version "1.0.18"
+  resolved "https://registry.npm.taobao.org/apollo-link-context/download/apollo-link-context-1.0.18.tgz#9e700e3314da8ded50057fee0a18af2bfcedbfc3"
+  integrity sha1-nnAOMxTaje1QBX/uChivK/ztv8M=
+  dependencies:
+    apollo-link "^1.2.12"
+    tslib "^1.9.3"
+
 apollo-link-http-common@^0.2.14:
   version "0.2.14"
   resolved "https://registry.npm.taobao.org/apollo-link-http-common/download/apollo-link-http-common-0.2.14.tgz#d3a195c12e00f4e311c417f121181dcc31f7d0c8"
@@ -1617,6 +1630,11 @@ apollo-link-http@^1.5.15:
     apollo-link "^1.2.12"
     apollo-link-http-common "^0.2.14"
     tslib "^1.9.3"
+
+apollo-link-logger@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.npm.taobao.org/apollo-link-logger/download/apollo-link-logger-1.2.3.tgz#1f3e6f7849ce7a7e3aa822141fe062cfa278b1e1"
+  integrity sha1-Hz5veEnOen46qCIUH+Biz6J4seE=
 
 apollo-link-rest@^0.7.3:
   version "0.7.3"

@@ -17,7 +17,7 @@ export const CONFIG = {
   clientDomains: {
     'gql-server': 'http://gql-server.example.com:4010',
     account: 'http://account.example.com:3000',
-    customer: 'http://customer.example.com:4010',
+    customer: 'http://customer.example.com:3000',
   },
 
   // 存在多个应用

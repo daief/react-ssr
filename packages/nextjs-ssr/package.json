@@ -4,5 +4,10 @@
   "scripts": {
     "dev": "next dev src",
     "build": "next build src"
+  },
+  "dependencies": {
+    "@axew/rc-if": "^1.0.0",
+    "apollo-link-context": "^1.0.18",
+    "apollo-link-logger": "^1.2.3"
   }
 }

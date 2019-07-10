@@ -1,16 +1,25 @@
 import gql from '@/gqls/login.gql';
-import { Button, Form, Input, Row } from 'antd';
+import { FI } from '@axew/rc-if';
+import {
+  requiredRule,
+  RESPONSE_CODE,
+  useMutationExtend,
+} from '@react-ssr/shared';
+import { CONFIG } from '@react-ssr/shared/CONFIG';
+import { Alert, Button, Form, Input, Row } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
+import { ILoginResultResp } from 'gql-types/authorization';
 import { LANG_HELPER } from 'locales/en';
 import * as React from 'react';
-import { useMutation } from 'react-apollo-hooks';
 import { useTranslation } from 'react-i18next';
 import styles from './style.less';
-import { requiredRule } from '@react-ssr/shared';
 
 export const Page: React.SFC<FormComponentProps> = ({ form }) => {
   const { t } = useTranslation();
-  const [doLogin, { loading }] = useMutation(gql.login);
+  const [doLogin, { loading, errorMessage }] = useMutationExtend<{
+    login: ILoginResultResp;
+  }>(gql.login);
+
   const handleSubmit = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
     form.validateFields((err, vals) => {
@@ -21,9 +30,19 @@ export const Page: React.SFC<FormComponentProps> = ({ form }) => {
         variables: {
           ...vals,
         },
-      });
+      })
+        .then(resp => {
+          if (resp.data.login.code === RESPONSE_CODE.SUCCESS) {
+            //
+            // location.href = `${CONFIG.clientDomains.customer}`;
+          }
+        })
+        .catch(e => {
+          // 网络错误、非成功 code、各种错误进入 catch
+        });
     });
   };
+
   return (
     <div className={`t-center ${styles.login}`}>
       <h1 style={{ marginBottom: 40 }}>
@@ -32,6 +51,16 @@ export const Page: React.SFC<FormComponentProps> = ({ form }) => {
       </h1>
 
       <Form onSubmit={handleSubmit} className="t-left">
+        <div style={{ height: 70 }}>
+          <FI show={!!errorMessage}>
+            <Alert
+              className="form-field"
+              type="error"
+              message={errorMessage}
+              showIcon
+            />
+          </FI>
+        </div>
         <Row className="form-field">
           <Form.Item>
             {form.getFieldDecorator('account', {

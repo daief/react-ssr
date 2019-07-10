@@ -3,7 +3,7 @@
  */
 import { CONFIG } from '@/CONFIG';
 import { Resp } from '@/interface';
-import { RESPONSE_CODE } from '@react-ssr/shared';
+import { LOCALE_ENUM, RESPONSE_CODE } from '@react-ssr/shared';
 
 function ca(
   content: any = {},
@@ -17,10 +17,21 @@ function ca(
   };
 }
 
+/**
+ * 请求 mock，这里简单处理 mock 的响应
+ */
 export const mock = {
   [CONFIG.services.unified_certification]: {
     'post /login': (data, headers) =>
-      ca({ token: `this_is_a_fake_token_${data.account}_${data.password}` }),
+      data.password === '123456'
+        ? ca({ token: `this_is_a_fake_token_${data.account}_123456` })
+        : ca(
+            {},
+            RESPONSE_CODE.FAIL,
+            headers['x-c-locale'] === LOCALE_ENUM.ZH_CH
+              ? '密码错误（123456）'
+              : 'Wrong password(123456)',
+          ),
     'get /info': (_, headers) => {
       if (!headers.Authorization) {
         return ca({}, RESPONSE_CODE.TOKEN_INVALID, 'Token invalid.');

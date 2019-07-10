@@ -1,4 +1,4 @@
-import { RESPONSE_CODE } from '@react-ssr/shared';
+import { Resp } from '@react-ssr/shared';
 import * as http from 'http';
 import { RESTService } from './dataSource/RESTService';
 
@@ -15,8 +15,4 @@ export interface GQLContext {
   req: http.IncomingMessage;
 }
 
-export interface Resp<T = any> {
-  code: RESPONSE_CODE;
-  message: string;
-  content: T;
-}
+export { Resp };
