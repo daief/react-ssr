@@ -23,22 +23,28 @@ module.exports = (nextConfig = {}) => {
           new (require('webpack')).IgnorePlugin(/^\.\/locale$/, /moment$/),
         );
 
-        config.module.rules.push({
-          test: /\.(jpe?g|png|svg|gif|ico|webp)$/,
-          use: [
-            {
-              loader: 'url-loader',
-              options: {
-                // limit: 8192,
-                limit: 1,
-                fallback: 'file-loader',
-                publicPath: `/_next/static/images/`,
-                outputPath: `${isServer ? '../' : ''}static/images/`,
-                name: '[name]-[hash].[ext]',
+        config.module.rules.push(
+          {
+            test: /\.(jpe?g|png|svg|gif|ico|webp)$/,
+            use: [
+              {
+                loader: 'url-loader',
+                options: {
+                  // limit: 8192,
+                  limit: 1,
+                  fallback: 'file-loader',
+                  publicPath: `/_next/static/images/`,
+                  outputPath: `${isServer ? '../' : ''}static/images/`,
+                  name: '[name]-[hash].[ext]',
+                },
               },
-            },
-          ],
-        });
+            ],
+          },
+          {
+            test: /\.(graphql|gql)$/,
+            loader: 'graphql-tag/loader',
+          },
+        );
 
         config.module.rules.forEach(rule => {
           if (rule.use && rule.use.loader === 'next-babel-loader') {

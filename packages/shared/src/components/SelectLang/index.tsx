@@ -1,7 +1,4 @@
 import { Dropdown, Icon, Menu } from 'antd';
-// import 'antd/lib/dropdown/style';
-// import 'antd/lib/icon/style';
-// import 'antd/lib/menu/style';
 import * as cookies from 'browser-cookies';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +17,7 @@ export const SeleceLang: React.SFC<{
     i18n.changeLanguage(lang);
   }
 
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const locales = [LOCALE_ENUM.ZH_CH, LOCALE_ENUM.EN_US];
   const languageLabels = {
     [LOCALE_ENUM.ZH_CH]: '简体中文',
@@ -53,7 +50,7 @@ export const SeleceLang: React.SFC<{
   return (
     <Dropdown overlay={langMenu}>
       <span className={`${styles.dropDown} ${className}`}>
-        <Icon type="global" title={t('common:select_lang')} />
+        <Icon type="global" />
       </span>
     </Dropdown>
   );

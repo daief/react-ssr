@@ -13,10 +13,17 @@ export const CONFIG = {
     customer: 'key_customer',
   },
 
+  // 应用域名
+  clientDomains: {
+    'gql-server': 'http://gql-server.example.com',
+    account: 'http://account.example.com',
+    customer: 'http://customer.example.com',
+  },
+
   // 存在多个应用
   services: {
-    unified_certification: 'http://service.unified-certification.example.com',
-    customer: 'http://service.customer.example.com',
+    unified_certification: 'http://unified-certification.service.com',
+    customer: 'http://customer.service.com',
   },
 
   // 请求是否 mock

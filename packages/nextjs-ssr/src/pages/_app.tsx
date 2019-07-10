@@ -1,4 +1,4 @@
-import '@/global.less';
+import styles from '@/global.less';
 import { lang as en } from '@/locales/en';
 import { lang as zh } from '@/locales/zh';
 import {
@@ -6,9 +6,16 @@ import {
   lngFromReq,
   LOCALE_ENUM,
 } from '@react-ssr/shared';
-import { I18nextProvider, i18nReact } from '@react-ssr/shared/compts';
-import { CONFIG } from '@react-ssr/shared/CONFIG';
+import {
+  ApolloWrap,
+  getApollo,
+  I18nextProvider,
+  i18nReact,
+  SeleceLang,
+} from '@react-ssr/shared/compts';
 import { Log } from '@react-ssr/shared/src/Log';
+import { NormalizedCacheObject } from 'apollo-cache-inmemory';
+import ApolloClient from 'apollo-client';
 import App, { AppContext, Container } from 'next/app';
 import Head from 'next/head';
 
@@ -20,8 +27,26 @@ const resources = {
 class MyApp extends App<{
   pageProps: any;
 }> {
+  public client: ApolloClient<NormalizedCacheObject>;
+
+  constructor(props) {
+    super(props);
+    this.client = getApollo({});
+    if (process.browser) {
+      i18nReact
+        .init({
+          debug: false,
+          fallbackLng: LOCALE_ENUM.EN_US,
+          lng: lngFromReq(),
+          resources,
+        })
+        .catch(e => {
+          Log.Error('Init i18nReact error:', e);
+        });
+    }
+  }
+
   public static async getInitialProps({ Component, ctx }: AppContext) {
-    const pageProps = await getInitialPropsResultOfComponent(Component, ctx);
     // 第一次打开页面这里在服务端执行，以后只在浏览器切换路由时执行
     // 所以可以作为初始化国际化的地方
     // 另外这里可以拿到 req 对象，从而获取国际化的初始语言
@@ -36,26 +61,12 @@ class MyApp extends App<{
         Log.Error('Init i18nReact error:', e);
       }
     }
+    const client = getApollo({});
+    ctx.client = client;
+    const pageProps = await getInitialPropsResultOfComponent(Component, ctx);
     return {
       pageProps,
     };
-  }
-
-  constructor(props) {
-    super(props);
-
-    if (process.browser) {
-      i18nReact
-        .init({
-          debug: false,
-          fallbackLng: LOCALE_ENUM.EN_US,
-          lng: lngFromReq(),
-          resources,
-        })
-        .catch(e => {
-          Log.Error('Init i18nReact error:', e);
-        });
-    }
   }
 
   public componentDidCatch(e) {
@@ -77,7 +88,12 @@ class MyApp extends App<{
         </Head>
         <Container>
           <I18nextProvider>
-            <Component {...pageProps} />
+            <ApolloWrap client={this.client}>
+              <div className={styles.select_lang}>
+                <SeleceLang />
+              </div>
+              <Component {...pageProps} />
+            </ApolloWrap>
           </I18nextProvider>
         </Container>
       </>
