@@ -3,7 +3,7 @@ import * as cookies from 'browser-cookies';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { CONFIG } from '../../../CONFIG';
-import { LOCALE_ENUM } from '../../LOCALE';
+import { LOCALE_ENUM } from '../../locales/initDefI18next';
 import styles from './index.less';
 
 export const SeleceLang: React.SFC<{

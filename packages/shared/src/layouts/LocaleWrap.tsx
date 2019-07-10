@@ -9,14 +9,16 @@ import { I18nextProvider as Provider, initReactI18next } from 'react-i18next';
 
 import 'moment/locale/en-au';
 import 'moment/locale/zh-cn';
-import { LOCALE_ENUM } from '../LOCALE';
+import { LOCALE_ENUM, sharedI18next } from '../..';
 import { Log } from '../Log';
 
-export const i18nReact = i18n.use(initReactI18next);
-
-const originT = i18nReact.t;
+export const i18nReact = i18n
+  // 加载第三方国际化
+  .use(sharedI18next)
+  .use(initReactI18next);
 
 export function rewriteT() {
+  const originT = i18nReact.t;
   i18nReact.t = (...rest) => {
     const placeholder = '...';
     try {

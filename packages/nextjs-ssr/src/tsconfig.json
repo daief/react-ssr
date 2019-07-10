@@ -17,7 +17,8 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["../src/*"]
+      "@/*": ["../src/*"],
+      "gql-types/*": ["../../gql-server/src/resolvers/gql-types/*"]
     }
   },
   "exclude": ["node_modules"],

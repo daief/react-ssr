@@ -61,6 +61,8 @@ class MyApp extends App<{
         Log.Error('Init i18nReact error:', e);
       }
     }
+
+    // 获取 apollo client 对象，挂到 ctx 对象上
     const client = getApollo({});
     ctx.client = client;
     const pageProps = await getInitialPropsResultOfComponent(Component, ctx);

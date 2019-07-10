@@ -2,9 +2,14 @@ import * as cookies from 'browser-cookies';
 import { IncomingMessage } from 'http';
 import { NextComponentType, NextPageContext } from 'next';
 import { CONFIG } from '../CONFIG';
-import { LOCALE_ENUM } from './LOCALE';
+import { LOCALE_ENUM } from './locales/initDefI18next';
 import { Log } from './Log';
 
+/**
+ * 检测并执行组件的 getInitialProps
+ * @param c
+ * @param ctx
+ */
 export async function getInitialPropsResultOfComponent(
   c: NextComponentType,
   ctx: NextPageContext,

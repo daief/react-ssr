@@ -1,22 +1,27 @@
 import gql from '@/gqls/login.gql';
 import { Button, Form, Input, Row } from 'antd';
+import { FormComponentProps } from 'antd/lib/form';
 import { LANG_HELPER } from 'locales/en';
-import { NextComponentType } from 'next';
 import * as React from 'react';
 import { useMutation } from 'react-apollo-hooks';
 import { useTranslation } from 'react-i18next';
 import styles from './style.less';
+import { requiredRule } from '@react-ssr/shared';
 
-export const Page: NextComponentType<{}> = props => {
+export const Page: React.SFC<FormComponentProps> = ({ form }) => {
   const { t } = useTranslation();
   const [doLogin, { loading }] = useMutation(gql.login);
   const handleSubmit = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
-    doLogin({
-      variables: {
-        account: 'a',
-        password: 'd',
-      },
+    form.validateFields((err, vals) => {
+      if (err) {
+        return;
+      }
+      doLogin({
+        variables: {
+          ...vals,
+        },
+      });
     });
   };
   return (
@@ -26,15 +31,19 @@ export const Page: NextComponentType<{}> = props => {
         {t(LANG_HELPER.login.login.done)}
       </h1>
 
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} className="t-left">
         <Row className="form-field">
           <Form.Item>
-            <Input size="large" />
+            {form.getFieldDecorator('account', {
+              rules: [requiredRule(t, 'account')],
+            })(<Input size="large" />)}
           </Form.Item>
         </Row>
         <Row className="form-field">
           <Form.Item>
-            <Input.Password size="large" />
+            {form.getFieldDecorator('password', {
+              rules: [requiredRule(t, 'password')],
+            })(<Input.Password size="large" />)}
           </Form.Item>
         </Row>
         <Row className="form-field">
@@ -55,4 +64,4 @@ export const Page: NextComponentType<{}> = props => {
   );
 };
 
-export default Page;
+export default Form.create()(Page);
