@@ -5,8 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev src",
-    "build": "next build src",
-    "export": "next export src -o dist"
+    "export": "next build src && next export src -o dist"
   },
   "dependencies": {
     "apollo-link-rest": "^0.7.3",

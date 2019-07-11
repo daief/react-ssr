@@ -60,6 +60,9 @@ module.exports = (nextConfig = {}) => {
             ? 'static/css/[name].chunk.css'
             : 'static/css/[name].[contenthash:8].chunk.css',
         }),
+        new (require('webpack-filter-warnings-plugin'))({
+          exclude: /mini-css-extract-plugin[^]*Conflicting order between:/,
+        }),
       );
 
       if (!dev && !isServer) {

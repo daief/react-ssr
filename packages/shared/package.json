@@ -5,6 +5,7 @@
     "isomorphic-unfetch": "^3.0.0"
   },
   "devDependencies": {
+    "webpack-filter-warnings-plugin": "^1.2.1",
     "webpackbar": "^3.2.0"
   }
 }
