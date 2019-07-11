@@ -78,12 +78,13 @@ export const mock = {
       return ca({ token });
     },
     'get /info': (_, headers) => {
-      if (!fakeTokenStore.invalid(headers.Authorization)) {
+      const t = headers.Authorization;
+      if (!fakeTokenStore.invalid(t)) {
         return ca({}, RESPONSE_CODE.TOKEN_INVALID, 'Token invalid.');
       }
       return ca({
-        username: headers.Authorization,
-        email: `${headers.Authorization}@example.com`,
+        username: t.replace('this_is_a_fake_token_', ''),
+        email: `${t.replace('this_is_a_fake_token_', '')}@example.com`,
       });
     },
   },

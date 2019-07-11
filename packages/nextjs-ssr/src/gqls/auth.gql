@@ -16,3 +16,9 @@ query info {
     code
   }
 }
+
+mutation logout {
+  logout {
+    code
+  }
+}

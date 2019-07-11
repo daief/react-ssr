@@ -33,11 +33,15 @@ export const ApolloWrap: React.SFC<{
 export function getApollo(options: {
   links?: ApolloLink[];
   ctx?: NextPageContext;
+  state?: {
+    resolvers?: any;
+    defaults?: any;
+  };
 }): ApolloClient<NormalizedCacheObject> {
   if (process.browser && apolloClient) {
     return apolloClient;
   }
-  const { links = [], ctx } = options;
+  const { links = [], ctx, state } = options;
 
   const authLink = setContext((_, { headers }) => {
     // 这里用于添加自定义的 headers 字段
@@ -52,9 +56,11 @@ export function getApollo(options: {
     };
   });
 
+  const cache = new InMemoryCache();
+
   // 服务端每次生成新的 apollo client 对象
   apolloClient = new ApolloClient({
-    cache: new InMemoryCache(),
+    cache,
     // connectToDevTools: process.browser,
     link: ApolloLink.from(
       [

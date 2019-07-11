@@ -1,0 +1,22 @@
+query index($input: CustomerListInput) {
+  userInfo {
+    content {
+      email
+      username
+    }
+    code
+  }
+
+  customerList(input: $input) {
+    content {
+      id
+      name
+      age
+      orderList {
+        id
+        createTime
+      }
+    }
+    code
+  }
+}
