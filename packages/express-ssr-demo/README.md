@@ -2,8 +2,6 @@
 
 基于 express、React 从零搭建的一个 SSR demo。
 
-对应文章 [《从零搭建 SRR》](https://daief.github.io/2019-07-02/get-a-ssr-demo-step-by-step.html)。
-
 ## Dev
 
 调试开发，需启动两个终端，一个监视 web 部分的变化并随之编译；另一个用于调试 Node.js 端脚本。

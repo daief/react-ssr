@@ -21,6 +21,10 @@ module.exports = (nextConfig = {}) => {
 
         config.plugins.push(
           new (require('webpack')).IgnorePlugin(/^\.\/locale$/, /moment$/),
+          new (require('webpackbar'))({
+            name: isServer ? 'Server' : 'App',
+            color: isServer ? 'orange' : 'green',
+          }),
         );
 
         config.module.rules.push(

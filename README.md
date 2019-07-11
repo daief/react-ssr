@@ -2,9 +2,13 @@
 
 这里是关于 SSR demo 以及一些 Next.js 使用的仓库合集，还包括一个 GraphQL 服务的搭建 demo。
 
+<!--
+对应文章 [《从零搭建 SRR》](https://daief.github.io/2019-07-02/get-a-ssr-demo-step-by-step.html)。
+-->
+
 ## Index
 
-这是一个 Monorepo，下面是该仓库的目录。
+这是一个 Monorepo（基于 yarn workspaces），下面是该仓库的目录。
 
 | Package                                            | Description                                        |
 | -------------------------------------------------- | -------------------------------------------------- |

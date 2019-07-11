@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "dependencies": {
     "isomorphic-unfetch": "^3.0.0"
+  },
+  "devDependencies": {
+    "webpackbar": "^3.2.0"
   }
 }

@@ -52,8 +52,13 @@ module.exports = (nextConfig = {}) => {
 
       config.plugins.push(
         new MiniCssExtractPlugin({
-          filename: dev ? '[name].css' : 'static/[name].[hash].css',
-          chunkFilename: dev ? '[id].css' : 'static/[id].[hash].css',
+          // 要加上 static，否则打包后 404
+          filename: dev
+            ? 'static/css/[name].css'
+            : 'static/css/[name].[contenthash:8].css',
+          chunkFilename: dev
+            ? 'static/css/[name].chunk.css'
+            : 'static/css/[name].[contenthash:8].chunk.css',
         }),
       );
 
@@ -79,6 +84,14 @@ module.exports = (nextConfig = {}) => {
           },
           ...(typeof origExternals[0] === 'function' ? [] : origExternals),
         ];
+      } else {
+        // 把所有 css 合并，否则前端路由切换页面的时候不会拉取对应的 css 文件
+        config.optimization.splitChunks.cacheGroups.styles = {
+          name: 'styles',
+          test: /\.(css|less)$/,
+          chunks: 'all',
+          enforce: true,
+        };
       }
 
       if (typeof nextConfig.webpack === 'function') {
