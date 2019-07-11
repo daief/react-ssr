@@ -5,7 +5,7 @@ import {
   RESPONSE_CODE,
   useMutationExtend,
 } from '@react-ssr/shared';
-import { Alert, Button, Form, Input, Row } from 'antd';
+import { Alert, Button, Form, Icon, Input, Row } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import { ILoginResultResp } from 'gql-types/authorization';
 import { LANG_HELPER } from 'locales/en';
@@ -80,6 +80,7 @@ export const Page: React.SFC<FormComponentProps & WithRouterProps> = ({
             })(
               <Input
                 size="large"
+                prefix={<Icon type="user" />}
                 placeholder={t(LANG_HELPER.common.please_enter.done, {
                   field: t(LANG_HELPER.login.account.done),
                 })}
@@ -94,6 +95,7 @@ export const Page: React.SFC<FormComponentProps & WithRouterProps> = ({
             })(
               <Input.Password
                 size="large"
+                prefix={<Icon type="lock" />}
                 placeholder={t(LANG_HELPER.common.please_enter.done, {
                   field: t(LANG_HELPER.login.password.done),
                 })}

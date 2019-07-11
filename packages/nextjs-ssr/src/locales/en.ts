@@ -17,6 +17,19 @@ export const lang = {
       'This is rendered by Next.js server. Click button to send query at browser with some params.',
     submit: 'Submit',
     logout: 'Logout',
+    toPageText: 'Browser router, click to `/page`',
+    customerList: 'Customer List',
+    orderList: 'Order List',
+  },
+  page: {
+    backText: 'Back to index `/`',
+    text: 'Here is `/page`',
+  },
+  table: {
+    id: 'ID',
+    name: 'Name',
+    age: 'Age',
+    createTime: 'Create Time',
   },
   common: {
     please_enter: 'Please enter {{field}}',

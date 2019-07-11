@@ -19,6 +19,7 @@ import { Customer, ICustomerListResponse } from 'gql-types/customer';
 import { LANG_HELPER } from 'locales/en';
 import moment from 'moment';
 import { NextComponentType } from 'next';
+import Link from 'next/link';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -31,16 +32,16 @@ const Display: React.SFC<IndexResp> = ({ userInfo, customerList }) => {
   const { t } = useTranslation();
   const expandedRowRender = (record: Customer) => {
     const columns = [
-      { title: 'id', dataIndex: 'id' },
+      { title: t(LANG_HELPER.table.id.done), dataIndex: 'id' },
       {
-        title: 'createTime',
+        title: t(LANG_HELPER.table.createTime.done),
         dataIndex: 'createTime',
         render: _ => moment(_).format('YYYY-MM-DD HH:mm:SS'),
       },
     ];
     return (
       <Table
-        title={_ => 'Order list'}
+        title={_ => t(LANG_HELPER.index.orderList.done)}
         columns={columns}
         dataSource={record.orderList}
         pagination={false}
@@ -61,19 +62,19 @@ const Display: React.SFC<IndexResp> = ({ userInfo, customerList }) => {
       </Descriptions>
       <Divider />
       <Table
-        title={_ => 'Customer list'}
+        title={_ => t(LANG_HELPER.index.customerList.done)}
         dataSource={getProp(() => customerList.content, [])}
         columns={[
           {
-            title: 'Id',
+            title: t(LANG_HELPER.table.id.done),
             dataIndex: 'id',
           },
           {
-            title: 'name',
+            title: t(LANG_HELPER.table.name.done),
             dataIndex: 'name',
           },
           {
-            title: 'age',
+            title: t(LANG_HELPER.table.age.done),
             dataIndex: 'age',
           },
         ]}
@@ -138,6 +139,10 @@ const Page: NextComponentType<
   );
   return (
     <div style={{ margin: 50 }}>
+      <Link href="/page">
+        <a>{t(LANG_HELPER.index.toPageText.done)}</a>
+      </Link>
+      <Divider />
       <Search
         submit={vals => refetch({ variables: { input: vals } })}
         loading={loading}
@@ -145,8 +150,13 @@ const Page: NextComponentType<
       <Divider />
       <Spin spinning={loading}>
         <FI>
-          <FI.If if={isFromServer && !(data || error)}>
-            <p>{t(LANG_HELPER.index.tip.done)}</p>
+          <FI.If if={!(data || error)}>
+            <FI.If if={isFromServer}>
+              <p>{t(LANG_HELPER.index.tip.done)}</p>
+            </FI.If>
+            <FI.Else>
+              {/* 客户端切换，数据依旧来源 getInitialProps，只是该方法在浏览器执行 */}
+            </FI.Else>
             <Display userInfo={userInfo} customerList={customerList} />
           </FI.If>
           <FI.Else>

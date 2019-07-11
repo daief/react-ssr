@@ -67,9 +67,12 @@ class MyApp extends App<{
       }
     }
 
-    // 获取 apollo client 对象，挂到 ctx 对象上
-    const client = getApollo({ ctx, links: links({ ctx }) });
-    ctx.client = client;
+    if (!ctx.client) {
+      // 获取 apollo client 对象，挂到 ctx 对象上
+      const client = getApollo({ ctx, links: links({ ctx }) });
+      ctx.client = client;
+    }
+
     const [pageProps, layoutProps] = await Promise.all([
       getInitialPropsResultOfComponent(Component, ctx),
       // @ts-ignore
