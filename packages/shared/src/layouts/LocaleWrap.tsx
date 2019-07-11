@@ -17,7 +17,7 @@ import { LOCALE_ENUM, sharedI18next } from '../..';
 import { Log } from '../Log';
 
 /**
- * TODO 国际化对象直接共用了
+ * 国际化对象直接共用了
  */
 export const i18nReact = i18n
   // 加载第三方国际化

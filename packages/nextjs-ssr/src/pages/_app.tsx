@@ -16,6 +16,7 @@ import {
 import { Log } from '@react-ssr/shared/src/Log';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
+import { links } from 'libs/links';
 import App, { AppContext, Container } from 'next/app';
 import Head from 'next/head';
 
@@ -32,7 +33,7 @@ class MyApp extends App<{
 
   constructor(props) {
     super(props);
-    this.client = getApollo({});
+    this.client = getApollo({ links: links({}) });
     if (process.browser) {
       i18nReact
         .init({
@@ -64,7 +65,7 @@ class MyApp extends App<{
     }
 
     // 获取 apollo client 对象，挂到 ctx 对象上
-    const client = getApollo({ ctx });
+    const client = getApollo({ ctx, links: links({ ctx }) });
     ctx.client = client;
     const [pageProps, layoutProps] = await Promise.all([
       getInitialPropsResultOfComponent(Component, ctx),

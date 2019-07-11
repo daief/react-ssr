@@ -10,34 +10,13 @@ import * as React from 'react';
 export const AuthLayout: NextComponentType = ({ children }) => <>{children}</>;
 
 AuthLayout.getInitialProps = async ctx => {
-  await ctx.client
-    .query<IUserInfoResp>({
-      query: gql.info,
-      fetchPolicy: 'network-only',
-    })
-    .catch(e => {
-      if (
-        getProp(() => e.graphQLErrors[0].extensions.code) ===
-        RESPONSE_CODE.TOKEN_INVALID
-      ) {
-        const url = `${
-          CONFIG.clientDomains.account
-        }/auth/login?callback=${encodeURIComponent(
-          process.browser ? location.href : ctx.req.url,
-        )}`;
-
-        // token 失效，重定向回登录页
-        if (process.browser) {
-          message.error(e.message);
-          router.replace(url);
-        } else {
-          ctx.res.writeHead(302, {
-            location: url,
-          });
-          ctx.res.end();
-        }
-      }
-      return {};
-    });
+  // 每次调一次接口，本例中主要目的用来触发 token 校验
+  // 还可以在这里请求路由权限，控制用户路由的访问
+  // hasPermission = resp.permissions.includes(ctx.pathname)
+  // return { hasPermission }
+  ctx.client.query<IUserInfoResp>({
+    query: gql.info,
+    fetchPolicy: 'network-only',
+  });
   return {};
 };

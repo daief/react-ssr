@@ -104,7 +104,7 @@ export const mock = {
           .fill(void 0)
           .map((__, i) => ({
             id: `${startId}-${i}`,
-            name: `name-${startId}`,
+            name: `name-${i}`,
             age: age + i,
             orderList: Array(3)
               .fill(void 0)
