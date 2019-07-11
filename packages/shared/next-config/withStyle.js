@@ -52,8 +52,8 @@ module.exports = (nextConfig = {}) => {
 
       config.plugins.push(
         new MiniCssExtractPlugin({
-          filename: dev ? '[name].css' : '[name].[hash].css',
-          chunkFilename: dev ? '[id].css' : '[id].[hash].css',
+          filename: dev ? '[name].css' : 'static/[name].[hash].css',
+          chunkFilename: dev ? '[id].css' : 'static/[id].[hash].css',
         }),
       );
 

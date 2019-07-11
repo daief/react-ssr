@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "next dev src",
-    "build": "next build src"
+    "build": "next build src",
+    "start": "next start build"
   },
   "dependencies": {
     "@axew/rc-if": "^1.0.0",
