@@ -6,6 +6,8 @@ export const lang: LANG_TYPE = {
   },
   login: {
     login: '登录',
+    account: '账号',
+    password: '密码',
   },
   index: {
     userInfo: '用户信息',
@@ -13,5 +15,9 @@ export const lang: LANG_TYPE = {
     email: '邮件',
     tip: '这一屏数据由服务端渲染，点击上方按钮来发送浏览器的请求。',
     submit: '提交',
+    logout: ' 登出',
+  },
+  common: {
+    please_enter: '请输入{{field}}',
   },
 };

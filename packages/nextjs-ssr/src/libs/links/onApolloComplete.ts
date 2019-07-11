@@ -5,12 +5,35 @@ import { ApolloLink, Observable } from 'apollo-link';
 import { NextPageContext } from 'next';
 
 export function onApolloComplete({ ctx }: { ctx?: NextPageContext } = {}) {
+  const toLogin = () => {
+    const url = `${
+      CONFIG.clientDomains.account
+    }/auth/login?callback=${encodeURIComponent(
+      process.browser ? location.href : ctx.req.url,
+    )}`;
+
+    // token 失效，重定向回登录页
+    if (process.browser) {
+      location.replace(url);
+    } else {
+      ctx.res.writeHead(302, {
+        location: url,
+      });
+      ctx.res.end();
+    }
+  };
+
   return new ApolloLink((operation, forward) => {
     // 这里可以看作是 apollo 请求的拦截器
     // 下面的主要自动进行了错误提示已经登录状态校验
     // 另外，可以在发起每一次的请求时，将配置项 options 传入 context，这样在这里可以通过 getContext 拿到
     //    比如控制某个请求不弹错误提示......
-    // const { options } = operation.getContext()
+    const { autoToast = true } = operation.getContext();
+
+    if (operation.operationName === 'logout') {
+      toLogin();
+      return forward(operation);
+    }
     return new Observable(observer => {
       const sub = forward(operation).subscribe({
         next: result => {
@@ -20,7 +43,7 @@ export function onApolloComplete({ ctx }: { ctx?: NextPageContext } = {}) {
               code: getProp(() => error.extensions.code),
             }));
 
-            if (process.browser) {
+            if (process.browser && autoToast) {
               message.error(
                 getProp(
                   () =>
@@ -36,22 +59,7 @@ export function onApolloComplete({ ctx }: { ctx?: NextPageContext } = {}) {
                 ({ code }) => code === RESPONSE_CODE.TOKEN_INVALID,
               )
             ) {
-              const url = `${
-                CONFIG.clientDomains.account
-              }/auth/login?callback=${encodeURIComponent(
-                process.browser ? location.href : ctx.req.url,
-              )}`;
-
-              // token 失效，重定向回登录页
-              if (process.browser) {
-                location.replace(url);
-              } else {
-                ctx.res.writeHead(302, {
-                  location: url,
-                });
-                ctx.res.end();
-              }
-
+              toLogin();
               // 页面跳走了，提前结束
               observer.complete();
             }
@@ -60,7 +68,7 @@ export function onApolloComplete({ ctx }: { ctx?: NextPageContext } = {}) {
           observer.next(result);
         },
         error: error => {
-          if (process.browser) {
+          if (process.browser && autoToast) {
             message.error(error + '' || 'System Error!');
           }
           observer.error(error);

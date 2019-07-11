@@ -17,6 +17,7 @@ query info {
   }
 }
 
+# 发出登出操作，gql-server 会进行 cookie 清除
 mutation logout {
   logout {
     code

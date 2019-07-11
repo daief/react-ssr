@@ -33,6 +33,7 @@ async function main() {
       reply.setCookie(CONFIG.cookieKeys.token, '', {
         expires: new Date(0),
         maxAge: 0,
+        domain: CONFIG.mainDomain,
       });
       next();
       return;

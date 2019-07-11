@@ -6,6 +6,8 @@ export const lang = {
   },
   login: {
     login: 'Login',
+    account: 'Account',
+    password: 'Password',
   },
   index: {
     userInfo: 'User Info',
@@ -14,6 +16,10 @@ export const lang = {
     tip:
       'This is rendered by Next.js server. Click button to send query at browser with some params.',
     submit: 'Submit',
+    logout: 'Logout',
+  },
+  common: {
+    please_enter: 'Please enter {{field}}',
   },
 };
 

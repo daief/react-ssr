@@ -59,7 +59,7 @@ const Display: React.SFC<IndexResp> = ({ userInfo, customerList }) => {
           {getProp(() => userInfo.content.email)}
         </Descriptions.Item>
       </Descriptions>
-
+      <Divider />
       <Table
         title={_ => 'Customer list'}
         dataSource={getProp(() => customerList.content, [])}
@@ -112,7 +112,7 @@ const Search = Form.create<SearchProps>()(
             {form.getFieldDecorator('createTime')(<DatePicker />)}
           </Form.Item>
           <Form.Item>
-            <Button htmlType="submit" loading={loading}>
+            <Button htmlType="submit" loading={loading} type="primary">
               {t(LANG_HELPER.index.submit.done)}
             </Button>
           </Form.Item>
@@ -170,6 +170,7 @@ Page.getInitialProps = async ctx => {
   const resp = await ctx.client
     .query<IndexResp>({
       query: gql.index,
+      fetchPolicy: 'no-cache',
     })
     .catch(e => ({
       data: { userInfo: {}, customerList: {} },

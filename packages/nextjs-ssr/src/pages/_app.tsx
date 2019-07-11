@@ -1,6 +1,8 @@
 import styles from '@/global.less';
+import authGql from '@/gqls/auth.gql';
 import { lang as en } from '@/locales/en';
 import { lang as zh } from '@/locales/zh';
+import { FI } from '@axew/rc-if';
 import {
   getInitialPropsResultOfComponent,
   lngFromReq,
@@ -14,6 +16,7 @@ import {
   SeleceLang,
 } from '@react-ssr/shared/compts';
 import { Log } from '@react-ssr/shared/src/Log';
+import { Icon } from 'antd';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import { links } from 'libs/links';
@@ -83,11 +86,10 @@ class MyApp extends App<{
   }
 
   public render() {
-    const { Component, pageProps, layoutProps } = this.props;
+    const { Component, pageProps, layoutProps, router } = this.props;
     const Plain: React.SFC = ({ children }) => <>{children}</>;
     // @ts-ignore
     const Layout = Component.Layout || Plain;
-
     return (
       <>
         <Head>
@@ -102,6 +104,17 @@ class MyApp extends App<{
             <ApolloWrap client={this.client}>
               <div className={styles.select_lang}>
                 <SeleceLang />
+                <FI show={router.pathname !== '/auth/login'}>
+                  <Icon
+                    type="logout"
+                    style={{ fontSize: 16, marginLeft: 10 }}
+                    onClick={() => {
+                      this.client.mutate({
+                        mutation: authGql.logout,
+                      });
+                    }}
+                  />
+                </FI>
               </div>
               <Layout {...layoutProps}>
                 <Component {...pageProps} />

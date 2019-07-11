@@ -22,7 +22,11 @@ export const Page: React.SFC<FormComponentProps & WithRouterProps> = ({
   const { t } = useTranslation();
   const [doLogin, { loading, errorMessage }] = useMutationExtend<{
     login: ILoginResultResp;
-  }>(gql.login);
+  }>(gql.login, {
+    context: {
+      autoToast: false,
+    },
+  });
   const callbackURL = router.query.callback as string;
 
   const handleSubmit = (e: React.FormEvent<HTMLElement>) => {
@@ -72,15 +76,29 @@ export const Page: React.SFC<FormComponentProps & WithRouterProps> = ({
         <Row className="form-field">
           <Form.Item>
             {form.getFieldDecorator('account', {
-              rules: [requiredRule(t, 'account')],
-            })(<Input size="large" />)}
+              rules: [requiredRule(t, t(LANG_HELPER.login.account.done))],
+            })(
+              <Input
+                size="large"
+                placeholder={t(LANG_HELPER.common.please_enter.done, {
+                  field: t(LANG_HELPER.login.account.done),
+                })}
+              />,
+            )}
           </Form.Item>
         </Row>
         <Row className="form-field">
           <Form.Item>
             {form.getFieldDecorator('password', {
-              rules: [requiredRule(t, 'password')],
-            })(<Input.Password size="large" />)}
+              rules: [requiredRule(t, t(LANG_HELPER.login.password.done))],
+            })(
+              <Input.Password
+                size="large"
+                placeholder={t(LANG_HELPER.common.please_enter.done, {
+                  field: t(LANG_HELPER.login.password.done),
+                })}
+              />,
+            )}
           </Form.Item>
         </Row>
         <Row className="form-field">
