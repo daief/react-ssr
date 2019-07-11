@@ -1,0 +1,18 @@
+query page {
+  # 直接请求 Rest API
+  profile @rest(type: "RestPesponse", path: "/users/daief") {
+    avatar_url
+    name
+    id
+    public_repos
+    html_url
+  }
+  # 请求正常的 GraphQL Server
+  userInfo {
+    content {
+      username
+      email
+    }
+    code
+  }
+}

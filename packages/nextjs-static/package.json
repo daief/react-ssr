@@ -1,0 +1,16 @@
+{
+  "name": "nextjs-static",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev src",
+    "build": "next build src",
+    "export": "next export src -o dist"
+  },
+  "dependencies": {
+    "apollo-link-rest": "^0.7.3",
+    "graphql-anywhere": "^4.2.4",
+    "node-fetch": "^2.6.0"
+  }
+}

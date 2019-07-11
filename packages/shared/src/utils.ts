@@ -1,3 +1,5 @@
+import qs from 'querystring';
+
 export function getProp<T = any>(fn: () => T, defaultValue?: any): T {
   let result: any;
   try {
@@ -8,4 +10,10 @@ export function getProp<T = any>(fn: () => T, defaultValue?: any): T {
       ? defaultValue
       : undefined;
   }
+}
+
+export function parseUrlSearch<T = any>(path: string): T {
+  const search = (path || '').replace(/^.*\?/, '');
+  // @ts-ignore
+  return qs.parse(search);
 }

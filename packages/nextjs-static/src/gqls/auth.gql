@@ -1,0 +1,25 @@
+mutation login($account: String!, $password: String!) {
+  login (account: $account, password: $password) {
+    content {
+      token
+    }
+    code
+  }
+}
+
+query info {
+  userInfo {
+    content {
+      username
+      email
+    }
+    code
+  }
+}
+
+# 发出登出操作，gql-server 会进行 cookie 清除
+mutation logout {
+  logout {
+    code
+  }
+}

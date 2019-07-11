@@ -78,7 +78,7 @@ interface IUseQueryExtendResult<TData = any> {
 
 export function useQueryExtend<TData = any, TVariables = OperationVariables>(
   query: DocumentNode,
-  options?: IUserQueryExtendOptions<TVariables>,
+  options: IUserQueryExtendOptions<TVariables> = {},
 ): [
   <D extends TData, T extends TVariables>(
     opts?: IUserQueryExtendOptions,

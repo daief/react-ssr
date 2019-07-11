@@ -1,0 +1,25 @@
+@import '~antd/lib/style/themes/default.less';
+
+:local(.login) {
+  padding-top: 50px;
+
+  .login-icon {
+    display: inline-block;
+    font-size: 0;
+    margin-right: 5px;
+    height: 26px;
+    width: auto;
+  }
+
+  .form-field {
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  @media screen and (max-width: @screen-sm) {
+    .form-field {
+      width: auto;
+      margin: 0 15px;
+    }
+  }
+}
