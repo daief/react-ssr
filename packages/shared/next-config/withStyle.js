@@ -88,7 +88,7 @@ module.exports = (nextConfig = {}) => {
           ...(typeof origExternals[0] === 'function' ? [] : origExternals),
         ];
       } else {
-        // 把所有 css 合并，否则前端路由切换页面的时候不会拉取对应的 css 文件
+        // 把所有 css 合并，因为前端路由切换页面的时候不会拉取对应的 css 文件
         config.optimization.splitChunks.cacheGroups.styles = {
           name: 'styles',
           test: /\.(css|less)$/,

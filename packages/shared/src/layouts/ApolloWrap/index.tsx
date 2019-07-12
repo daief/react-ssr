@@ -45,13 +45,17 @@ export function getApollo(options: {
 
   const authLink = setContext((_, { headers }) => {
     // 这里用于添加自定义的 headers 字段
-    const reqHeaders: any = !process.browser
-      ? getProp(() => ctx.req.headers, {})
-      : {};
+    // 当在 Server 端的时候，将来自 browser 的 headers 携带过去
+    // 需注意 host 字段的值
+    const reqHeaders: any = process.browser
+      ? {}
+      : getProp(() => ctx.req.headers, {});
     return {
       headers: {
         ...headers,
         ...reqHeaders,
+        // 置空 host
+        // host: void 0
       },
     };
   });

@@ -24,6 +24,11 @@ export const i18nReact = i18n
   .use(sharedI18next)
   .use(initReactI18next);
 
+/**
+ * 覆盖 t 方法，nextjs-static 项目中使用
+ * 将 Server 端的国际化输出全都设置成 `...`
+ * 还可以考虑其他的方式，比如设置一种不存在的语言，同时设置不存在的翻译输出为 `...`
+ */
 export function rewriteT() {
   const originT = i18nReact.t;
   i18nReact.t = (...rest) => {
