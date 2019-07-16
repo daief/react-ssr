@@ -5,12 +5,12 @@ import { Alert, Avatar, Card, Col, Divider, Row, Skeleton } from 'antd';
 import { AuthLayout } from 'components/AuthLayout';
 import { IUserInfoResp } from 'gql-types/authorization';
 import { LANG_HELPER } from 'locales/en';
-import { NextComponentType } from 'next';
+import { NextPage } from 'next';
 import Link from 'next/link';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-export const Page: NextComponentType = () => {
+export const Page: NextPage = () => {
   const { t } = useTranslation();
   const [_, { data, errorMessage, loading }] = useQueryExtend<{
     profile: {
@@ -82,6 +82,7 @@ export const Page: NextComponentType = () => {
   );
 };
 
+// @ts-ignore
 Page.Layout = AuthLayout;
 
 export default Page;

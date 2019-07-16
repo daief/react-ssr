@@ -1,5 +1,4 @@
 import gql from '@/gqls/index.gql';
-import { FI } from '@axew/rc-if';
 import { getProp, useQueryExtend } from '@react-ssr/shared';
 import {
   Button,
@@ -18,7 +17,7 @@ import { IUserInfoResp } from 'gql-types/authorization';
 import { Customer, ICustomerListResponse } from 'gql-types/customer';
 import { LANG_HELPER } from 'locales/en';
 import moment from 'moment';
-import { NextComponentType } from 'next';
+import { NextPage } from 'next';
 import Link from 'next/link';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -123,7 +122,7 @@ const Search = Form.create<SearchProps>()(
   },
 );
 
-const Page: NextComponentType = () => {
+const Page: NextPage = () => {
   const { t } = useTranslation();
   const [refetch, { data, loading, error }] = useQueryExtend<IndexResp>(
     gql.index,
@@ -161,6 +160,7 @@ const Page: NextComponentType = () => {
 /**
  * 设置 Layout，则该页面会在进入时进行 token 校验
  */
+// @ts-ignore
 Page.Layout = AuthLayout;
 
 export default Page;

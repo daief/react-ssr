@@ -1,12 +1,12 @@
 import { Divider } from 'antd';
 import { AuthLayout } from 'components/AuthLayout';
 import { LANG_HELPER } from 'locales/en';
-import { NextComponentType } from 'next';
+import { NextPage } from 'next';
 import Link from 'next/link';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-export const Page: NextComponentType = () => {
+export const Page: NextPage = () => {
   const { t } = useTranslation();
   return (
     <div>
@@ -18,7 +18,7 @@ export const Page: NextComponentType = () => {
     </div>
   );
 };
-
+// @ts-ignore
 Page.Layout = AuthLayout;
 
 export default Page;
