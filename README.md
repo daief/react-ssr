@@ -4,7 +4,7 @@
 
 本 demo 对应有两篇文章，可选择阅读：
 
-- [从零搭建 SRR](https://daief.github.io/2019-07-02/get-a-ssr-demo-step-by-step.html)。
+- [从零搭建 SSR](https://daief.github.io/2019-07-02/get-a-ssr-demo-step-by-step.html)。
 - [Next.js、GraphQL 使用小结](http://daief.github.io/2019-07-03/use-summary-of-next-js-and-graphql.html)
 
 ## Index
