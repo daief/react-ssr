@@ -10,6 +10,6 @@
   "dependencies": {
     "apollo-link-rest": "^0.7.3",
     "graphql-anywhere": "^4.2.4",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.7"
   }
 }
