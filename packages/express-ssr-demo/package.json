@@ -11,6 +11,6 @@
     "start": "cross-env NODE_ENV=production node ./lib/index.js"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.3"
   }
 }
